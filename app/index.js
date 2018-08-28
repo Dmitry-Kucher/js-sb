@@ -1,108 +1,112 @@
-window.onload = function() {
-    var game = new Phaser.Game(320, 480, Phaser.CANVAS);
-    var player;
-    var playerGraphic;
-    var enemy;
-    var enemyGraphic;
-    var playerTween;
-    var enemyTween;
-    var score = 0;
-    var scoreText;
-    var topScore;
-    var play = function(game) {};
-    play.prototype = {
-        preload: function() {
-            game.load.image("enemy", "assets/enemy.png");
-        },
-        create: function() {
-            score = 0;
-            topScore = localStorage.getItem("topboomdots") == null ? 0 : localStorage.getItem("topboomdots");
-            scoreText = game.add.text(10, 10, "-", {
-                font: "bold 16px Arial",
-                fill: "#acacac"
-            });
-            updateScore();
+class GameProcess extends Phaser.Game {
+    constructor() {
+        super(...arguments);
+    }
+}
 
-            playerGraphic = game.add.graphics(0, 0);
-            playerGraphic.beginFill(0x555555);
-            playerGraphic.lineStyle(2, 0xffffff, 0.5);
-            playerGraphic.drawCircle(0, 0, 20);
+class GameState extends Phaser.State {
+    constructor(game) {
+        super(game);
+        this.game = game;
+    }
 
-            player = game.add.sprite(game.world.centerX, game.world.centerY, null);
-            player.addChild(playerGraphic);
+    preload() {
+    }
+
+    create() {
+        this.score = 0;
+        this.topScore = localStorage.getItem("topboomdots") === null ? 0 : localStorage.getItem("topboomdots");
+        this.scoreText = this.game.add.text(10, 10, "-", {
+            font: "bold 16px Arial",
+            fill: "#acacac"
+        });
+        this.updateScore();
+
+        this.playerGraphic = this.game.add.graphics(0, 0);
+        this.playerGraphic.beginFill(0x555555);
+        this.playerGraphic.lineStyle(2, 0xffffff, 0.5);
+        this.playerGraphic.drawCircle(0, 0, 20);
+
+        this.player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, null);
+        this.player.addChild(this.playerGraphic);
 
 
-            enemyGraphic = game.add.graphics(0, 0);
-            enemyGraphic.beginFill(0x555555);
-            enemyGraphic.lineStyle(2, 0xffffff, 0.5);
-            enemyGraphic.drawCircle(0, 0, 40);
+        this.enemyGraphic = this.game.add.graphics(0, 0);
+        this.enemyGraphic.beginFill(0x555555);
+        this.enemyGraphic.lineStyle(2, 0xffffff, 0.5);
+        this.enemyGraphic.drawCircle(0, 0, 40);
 
-            enemy = game.add.sprite(game.width, 0, null);
-            enemy.addChild(enemyGraphic);
+        this.enemy = this.game.add.sprite(this.game.width, 0, null);
+        this.enemy.addChild(this.enemyGraphic);
 
-            placePlayer();
-            placeEnemy();
-        },
-        update: function() {
-            if (Phaser.Math.distance(player.x, player.y, enemy.x, enemy.y) < player.width / 2 + enemy.width / 2) {
-                enemyTween.stop();
-                playerTween.stop();
-                score++;
-                console.log(Math.abs(player.x - enemy.x))
-                if (Math.abs(player.x - enemy.x) < 10) {
-                    score += 2;
-                }
-                placeEnemy();
-                placePlayer();
-                updateScore();
+        this.placePlayer();
+        this.placeEnemy();
+    }
+
+    update() {
+        if (Phaser.Math.distance(this.player.x, this.player.y, this.enemy.x, this.enemy.y) < this.player.width / 2 + this.enemy.width / 2) {
+            this.enemyTween.stop();
+            this.playerTween.stop();
+            this.score++;
+            if (Math.abs(this.player.x - this.enemy.x) < 10) {
+                this.score += 2;
             }
+            this.placeEnemy();
+            this.placePlayer();
+            this.updateScore();
         }
     }
 
-    function die() {
-        localStorage.setItem("topboomdots", Math.max(score, topScore));
-        game.state.start("Play");
+    updateScore() {
+        this.scoreText.text = `Score: ${this.score} - Best: ${this.topScore}`;
     }
 
-    function updateScore() {
-        scoreText.text = "Score: " + score + " - Best: " + topScore;
+    placePlayer() {
+        this.player.x = this.game.width / 2;
+        this.player.y = this.game.height / 5 * 4;
+        this.playerTween = this.game.add.tween(this.player).to({
+            y: this.game.height
+        }, 10000 - this.score * 10, "Linear", true);
+        this.playerTween.onComplete.add(this.die, this);
+        this.game.input.onDown.add(this.fire, this);
     }
 
-    function placePlayer() {
-        player.x = game.width / 2;
-        player.y = game.height / 5 * 4;
-        playerTween = game.add.tween(player).to({
-            y: game.height
-        }, 10000 - score * 10, "Linear", true);
-        playerTween.onComplete.add(die, this);
-        game.input.onDown.add(fire, this);
-    }
-
-    function placeEnemy() {
-        enemy.x = game.width - enemy.width / 2;
-        enemy.y = -enemy.width / 2;
-        var enemyEnterTween = game.add.tween(enemy).to({
-            y: game.rnd.between(enemy.width * 2, game.height / 4 * 3 - player.width / 2)
+    placeEnemy() {
+        this.enemy.x = this.game.width - this.enemy.width / 2;
+        this.enemy.y = -this.enemy.width / 2;
+        this.enemyEnterTween = this.game.add.tween(this.enemy).to({
+            y: this.game.rnd.between(this.enemy.width * 2, this.game.height / 4 * 3 - this.player.width / 2)
         }, 200, "Linear", true);
-        enemyEnterTween.onComplete.add(moveEnemy, this);
+        this.enemyEnterTween.onComplete.add(this.moveEnemy, this);
     }
 
-    function moveEnemy() {
-        enemyTween = game.add.tween(enemy).to({
-            x: enemy.width / 2
-        }, 500 + game.rnd.between(0, 2500), Phaser.Easing.Cubic.InOut, true);
-        enemyTween.yoyo(true, 0);
-        enemyTween.repeat(50, 0);
+    die() {
+        localStorage.setItem("topboomdots", Math.max(this.score, this.topScore));
+        this.game.state.start("Play");
     }
 
-    function fire() {
-        game.input.onDown.remove(fire, this);
-        playerTween.stop();
-        playerTween = game.add.tween(player).to({
-            y: -player.width
+    fire() {
+        this.game.input.onDown.remove(this.fire, this);
+        this.playerTween.stop();
+        this.playerTween = this.game.add.tween(this.player).to({
+            y: -this.player.width
         }, 500, "Linear", true);
-        playerTween.onComplete.add(die, this);
+        this.playerTween.onComplete.add(this.die, this);
     }
+
+    moveEnemy() {
+        this.enemyTween = this.game.add.tween(this.enemy).to({
+            x: this.enemy.width / 2
+        }, 500 + this.game.rnd.between(0, 2500), Phaser.Easing.Cubic.InOut, true);
+        this.enemyTween.yoyo(true, 0);
+        this.enemyTween.repeat(50, 0);
+    }
+}
+
+window.onload = function() {
+    const game = new GameProcess(320, 480, Phaser.AUTO);
+    const play = new GameState();
+
     game.state.add("Play", play);
     game.state.start("Play");
 };
