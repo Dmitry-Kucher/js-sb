@@ -1,7 +1,9 @@
 window.onload = function() {
     var game = new Phaser.Game(320, 480, Phaser.CANVAS);
     var player;
+    var playerGraphic;
     var enemy;
+    var enemyGraphic;
     var playerTween;
     var enemyTween;
     var score = 0;
@@ -10,7 +12,6 @@ window.onload = function() {
     var play = function(game) {};
     play.prototype = {
         preload: function() {
-            game.load.image("player", "assets/player.png");
             game.load.image("enemy", "assets/enemy.png");
         },
         create: function() {
@@ -21,10 +22,24 @@ window.onload = function() {
                 fill: "#acacac"
             });
             updateScore();
-            player = game.add.sprite(game.width / 2, game.height / 5 * 4, "player");
-            player.anchor.setTo(0.5);
-            enemy = game.add.sprite(game.width, 0, "enemy");
-            enemy.anchor.set(0.5);
+
+            playerGraphic = game.add.graphics(0, 0);
+            playerGraphic.beginFill(0x555555);
+            playerGraphic.lineStyle(2, 0xffffff, 0.5);
+            playerGraphic.drawCircle(0, 0, 20);
+
+            player = game.add.sprite(game.world.centerX, game.world.centerY, null);
+            player.addChild(playerGraphic);
+
+
+            enemyGraphic = game.add.graphics(0, 0);
+            enemyGraphic.beginFill(0x555555);
+            enemyGraphic.lineStyle(2, 0xffffff, 0.5);
+            enemyGraphic.drawCircle(0, 0, 40);
+
+            enemy = game.add.sprite(game.width, 0, null);
+            enemy.addChild(enemyGraphic);
+
             placePlayer();
             placeEnemy();
         },
