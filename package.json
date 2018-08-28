@@ -8,6 +8,7 @@
     "webpack-dev-server": "^3.1.6"
   },
   "scripts": {
-    "start:dev": "webpack-dev-server"
+    "start:dev": "webpack-dev-server",
+    "build": "webpack -p"
   }
 }
