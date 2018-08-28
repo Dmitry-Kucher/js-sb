@@ -7,7 +7,7 @@ cache:
 before_script:
   - npm install
 script:
-  - cp -r ./dist/ .
+  - cp ./dist/* .
   - npm run build
 deploy:
   provider: pages
