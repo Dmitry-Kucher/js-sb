@@ -1,0 +1,13 @@
+{
+  "name": "js-sb",
+  "version": "0.0.1",
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.6"
+  },
+  "scripts": {
+    "start:dev": "webpack-dev-server"
+  }
+}
