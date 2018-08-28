@@ -7,8 +7,8 @@ cache:
 before_script:
   - npm install
 script:
-  - cp ./dist/* .
   - npm run build
+  - cp ./dist/* .
 deploy:
   provider: pages
   skip_cleanup: true
