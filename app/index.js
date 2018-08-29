@@ -39,22 +39,22 @@ class GameState extends Phaser.State {
         this.enemy = this.game.add.sprite(this.game.width, 0, null);
         this.enemy.addChild(this.enemyGraphic);
 
+        this.game.physics.enable([this.enemy, this.player], Phaser.Physics.ARCADE);
+
         this.placePlayer();
         this.placeEnemy();
     }
 
     update() {
-        if (Phaser.Math.distance(this.player.x, this.player.y, this.enemy.x, this.enemy.y) < this.player.width / 2 + this.enemy.width / 2) {
-            this.enemyTween.stop();
-            this.playerTween.stop();
-            this.score++;
-            if (Math.abs(this.player.x - this.enemy.x) < 10) {
-                this.score += 2;
-            }
-            this.placeEnemy();
-            this.placePlayer();
-            this.updateScore();
-        }
+        this.game.physics.arcade.overlap(this.player, this.enemy, this.collisionHandler, null, this);
+    }
+    collisionHandler() {
+        this.enemyTween.stop();
+        this.playerTween.stop();
+        this.score++;
+        this.placeEnemy();
+        this.placePlayer();
+        this.updateScore();
     }
 
     updateScore() {
@@ -64,10 +64,6 @@ class GameState extends Phaser.State {
     placePlayer() {
         this.player.x = this.game.width / 2;
         this.player.y = this.game.height / 5 * 4;
-        this.playerTween = this.game.add.tween(this.player).to({
-            y: this.game.height
-        }, 10000 - this.score * 10, "Linear", true);
-        this.playerTween.onComplete.add(this.die, this);
         this.game.input.onDown.add(this.fire, this);
     }
 
@@ -87,7 +83,6 @@ class GameState extends Phaser.State {
 
     fire() {
         this.game.input.onDown.remove(this.fire, this);
-        this.playerTween.stop();
         this.playerTween = this.game.add.tween(this.player).to({
             y: -this.player.width
         }, 500, "Linear", true);
