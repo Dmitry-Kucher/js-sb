@@ -14,24 +14,78 @@ class GameState extends Phaser.State {
 
     }
 
-    initEnemy() {
-        this.enemyGraphic = this.game.add.graphics(0, 0);
-        this.enemyGraphic.beginFill(0x555555);
-        this.enemyGraphic.lineStyle(2, 0xffffff, 0.5);
-        this.enemyGraphic.drawCircle(0, 0, 40);
+    initCircleItem(itemProps){
+        const lineStyle = itemProps.lineStyle;
+        const circle = itemProps.circle;
+        const graphicObject = this.game.add.graphics(0, 0);
+        graphicObject.beginFill(itemProps.color);
+        graphicObject.lineStyle(lineStyle.width, lineStyle.color, lineStyle.alpha);
+        graphicObject.drawCircle(circle.x, circle.y, circle.diameter);
 
-        this.enemy = this.game.add.sprite(this.game.width, 0, null);
-        this.enemy.addChild(this.enemyGraphic);
+        const item = this.game.add.sprite(itemProps.x, itemProps.y, null);
+        item.addChild(graphicObject);
+
+        return item;
     }
 
-    initiPlayer() {
-        this.playerGraphic = this.game.add.graphics(0, 0);
-        this.playerGraphic.beginFill(0x555555);
-        this.playerGraphic.lineStyle(2, 0xffffff, 0.5);
-        this.playerGraphic.drawCircle(0, 0, 20);
+    initEnemy() {
+        const enemyProps = {
+            x: this.game.width,
+            y: 0,
+            color: 0x555555,
+            circle: {
+                x: 0,
+                y: 0,
+                diameter: 40,
+            },
+            lineStyle: {
+                width: 2,
+                color: 0xffffff,
+                alpha: 0.5,
+            },
+        };
 
-        this.player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, null);
-        this.player.addChild(this.playerGraphic);
+        this.enemy = this.initCircleItem(enemyProps);
+    }
+
+    initBullet() {
+        const bulletProps = {
+            x: this.player.x,
+            y: this.player.y,
+            color: 0x555555,
+            circle: {
+                x: 0,
+                y: 0,
+                diameter: 40,
+            },
+            lineStyle: {
+                width: 2,
+                color: 0xffffff,
+                alpha: 0.5,
+            },
+        };
+
+        this.bullet = this.initCircleItem(bulletProps);
+    }
+
+    initPlayer() {
+        const playerProps = {
+            x: this.game.world.centerX,
+            y: this.game.world.centerY,
+            color: 0x555555,
+            circle: {
+                x: 0,
+                y: 0,
+                diameter: 20,
+            },
+            lineStyle: {
+                width: 2,
+                color: 0xffffff,
+                alpha: 0.5,
+            },
+        };
+
+        this.player = this.initCircleItem(playerProps);
     }
 
     initScore() {
@@ -44,7 +98,7 @@ class GameState extends Phaser.State {
     }
 
     create() {
-        this.initiPlayer();
+        this.initPlayer();
         const playerX = this.game.width / 2;
         const playerY = this.game.height / 5 * 4;
         this.placePlayer(playerX, playerY);
@@ -64,7 +118,7 @@ class GameState extends Phaser.State {
 
     collisionHandler() {
         this.enemyTween.stop();
-        this.playerTween.stop();
+        this.bulletTween.stop();
         this.score++;
         this.placeEnemy();
         this.placePlayer();
@@ -100,12 +154,13 @@ class GameState extends Phaser.State {
 
     fire() {
         this.game.input.onDown.remove(this.fire, this);
-        this.bullet = this.player;
-        this.playerTween = this.game.add.tween(this.bullet);
-        this.playerTween.to({
-            y: -this.player.width
+
+        this.initBullet();
+        this.bulletTween = this.game.add.tween(this.bullet);
+        this.bulletTween.to({
+            y: -this.bullet.width
         }, 500, "Linear", true);
-        this.playerTween.onComplete.add(this.die, this);
+        this.bulletTween.onComplete.add(this.die, this);
     }
 
     moveEnemy() {
