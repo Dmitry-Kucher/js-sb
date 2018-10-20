@@ -14,7 +14,7 @@ class GameState extends Phaser.State {
 
     }
 
-    initCircleItem(itemProps){
+    initCircleItem(itemProps) {
         const lineStyle = itemProps.lineStyle;
         const circle = itemProps.circle;
         const graphicObject = this.game.add.graphics(0, 0);
@@ -30,7 +30,7 @@ class GameState extends Phaser.State {
 
     initEnemy() {
         const enemyProps = {
-            x: this.game.width,
+            x: 0,
             y: 0,
             color: 0x555555,
             circle: {
@@ -56,7 +56,7 @@ class GameState extends Phaser.State {
             circle: {
                 x: 0,
                 y: 0,
-                diameter: 40,
+                diameter: 10,
             },
             lineStyle: {
                 width: 2,
@@ -102,21 +102,23 @@ class GameState extends Phaser.State {
         const playerX = this.game.width / 2;
         const playerY = this.game.height / 5 * 4;
         this.placePlayer(playerX, playerY);
+        this.initBullet();
 
         this.initEnemy();
-        this.placeEnemy(50, 50);
+        this.placeEnemy(this.enemy.width, 50);
 
         this.initScore();
         this.updateScore();
 
-        this.game.physics.enable([this.enemy, this.player], Phaser.Physics.ARCADE);
+        this.game.physics.enable([this.enemy, this.bullet], Phaser.Physics.ARCADE, true);
     }
 
     update() {
-        this.game.physics.arcade.overlap(this.player, this.enemy, this.collisionHandler, null, this);
+        this.game.physics.arcade.overlap(this.bullet, this.enemy, this.collisionHandler, null, this);
     }
 
     collisionHandler() {
+        console.log('collistion');
         this.enemyTween.stop();
         this.bulletTween.stop();
         this.score++;
@@ -136,15 +138,13 @@ class GameState extends Phaser.State {
     }
 
     placeEnemy(x, y) {
-        // this.enemy.x = this.game.width - this.enemy.width / 2;
-        // this.enemy.y = -this.enemy.width / 2;
         this.enemy.x = x;
         this.enemy.y = y;
-        this.enemyEnterTween = this.game.add.tween(this.enemy)
+        this.enemyTween = this.game.add.tween(this.enemy)
             .to({
-            y: this.game.rnd.between(this.enemy.width * 2, this.game.height / 4 * 3 - this.player.width / 2)
-        }, 200, "Linear", true);
-        this.enemyEnterTween.onComplete.add(this.moveEnemy, this);
+                y: this.game.rnd.between(this.enemy.width * 2, this.game.height / 4 * 3 - this.player.width / 2)
+            }, 200, "Linear", true);
+        this.enemyTween.onComplete.add(this.moveEnemy, this);
     }
 
     die() {
@@ -157,22 +157,43 @@ class GameState extends Phaser.State {
 
         this.initBullet();
         this.bulletTween = this.game.add.tween(this.bullet);
-        this.bulletTween.to({
-            y: -this.bullet.width
-        }, 500, "Linear", true);
+        this.bulletTween.to(
+            {
+                y: -this.bullet.width
+            },
+            500,
+            "Linear",
+            true,
+        );
         this.bulletTween.onComplete.add(this.die, this);
     }
 
     moveEnemy() {
-        this.enemyTween = this.game.add.tween(this.enemy).to({
-            x: this.enemy.width / 2
-        }, 500 + this.game.rnd.between(0, 2500), Phaser.Easing.Cubic.InOut, true);
-        this.enemyTween.yoyo(true, 0);
-        this.enemyTween.repeat(50, 0);
+        this.enemyTween = this.game.add
+            .tween(this.enemy);
+        const movementProperties = {
+            x: this.game.world.width - this.enemy.width / 2,
+        };
+        const movementVelocity = 500 + this.game.rnd.between(0, 2500);
+        const ease = Phaser.Easing.Cubic.InOut;
+        const autoStart = true;
+        const delay = 0;
+        const repeat = 50;
+        const yoyo = true;
+
+        this.enemyTween.to(
+            movementProperties,
+            movementVelocity,
+            ease,
+            autoStart,
+            delay,
+            repeat,
+            yoyo,
+        );
     }
 }
 
-window.onload = function() {
+window.onload = function () {
     const game = new GameProcess(320, 480, Phaser.AUTO);
     const play = new GameState();
 
