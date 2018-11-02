@@ -103,6 +103,7 @@ class GameState extends Phaser.State {
         const playerY = this.game.height / 5 * 4;
         this.placePlayer(playerX, playerY);
         this.initBullet();
+        // this.game.add.weapon(1, this.bullet);
 
         this.initEnemy();
         this.placeEnemy(this.enemy.width, 50);
@@ -155,17 +156,18 @@ class GameState extends Phaser.State {
     fire() {
         this.game.input.onDown.remove(this.fire, this);
 
-        this.initBullet();
-        this.bulletTween = this.game.add.tween(this.bullet);
-        this.bulletTween.to(
-            {
-                y: -this.bullet.width
-            },
-            500,
-            "Linear",
-            true,
-        );
-        this.bulletTween.onComplete.add(this.die, this);
+        this.bullet.body.velocity.y = -this.bullet.width;
+
+        // this.bulletTween = this.game.add.tween(this.bullet);
+        // this.bulletTween.to(
+        //     {
+        //         y: -this.bullet.width
+        //     },
+        //     500,
+        //     "Linear",
+        //     true,
+        // );
+        // this.bulletTween.onComplete.add(this.die, this);
     }
 
     moveEnemy() {
