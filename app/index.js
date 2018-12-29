@@ -49,6 +49,7 @@ class GameState extends Phaser.State {
     }
 
     initBullet() {
+        console.log('init bullet');
         const bulletProps = {
             x: this.player.x,
             y: this.player.y,
@@ -66,6 +67,15 @@ class GameState extends Phaser.State {
         };
 
         this.bullet = this.initCircleItem(bulletProps);
+        this.bullet.speed = 200;
+        this.bullet.checkWorldBounds = true;
+        this.bullet.collideWorldBounds = true;
+        this.bullet.events.onOutOfBounds.add(this.resetBullet, this);
+    }
+
+    resetBullet() {
+        this.bullet.reset(this.player.x, this.player.y);
+        this.game.input.onDown.add(this.fire, this);
     }
 
     initPlayer() {
@@ -119,12 +129,12 @@ class GameState extends Phaser.State {
     }
 
     collisionHandler() {
-        console.log('collistion');
         this.enemyTween.stop();
-        this.bulletTween.stop();
         this.score++;
         this.placeEnemy();
-        this.placePlayer();
+        const playerX = this.game.width / 2;
+        const playerY = this.game.height / 5 * 4;
+        this.placePlayer(playerX, playerY);
         this.updateScore();
     }
 
@@ -156,7 +166,7 @@ class GameState extends Phaser.State {
     fire() {
         this.game.input.onDown.remove(this.fire, this);
 
-        this.bullet.body.velocity.y = -this.bullet.width;
+        this.bullet.body.velocity.y = -this.bullet.speed;
 
         // this.bulletTween = this.game.add.tween(this.bullet);
         // this.bulletTween.to(
