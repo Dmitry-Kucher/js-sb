@@ -134,6 +134,7 @@ class GameState extends Phaser.State {
         this.placeEnemy();
         const playerX = this.game.width / 2;
         const playerY = this.game.height / 5 * 4;
+        this.resetBullet();
         this.placePlayer(playerX, playerY);
         this.updateScore();
     }
