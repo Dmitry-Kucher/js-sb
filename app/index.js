@@ -11,7 +11,7 @@ class GameState extends Phaser.State {
     }
 
     preload() {
-
+        this.game.load.image('bullet', 'shmup-bullet.png');
     }
 
     initCircleItem(itemProps) {
@@ -29,9 +29,11 @@ class GameState extends Phaser.State {
     }
 
     initEnemy() {
+        const x = this.game.width / 2;
+        const y = 40;
         const enemyProps = {
-            x: 0,
-            y: 0,
+            x,
+            y,
             color: 0x555555,
             circle: {
                 x: 0,
@@ -49,7 +51,6 @@ class GameState extends Phaser.State {
     }
 
     initBullet() {
-        console.log('init bullet');
         const bulletProps = {
             x: this.player.x,
             y: this.player.y,
@@ -65,17 +66,6 @@ class GameState extends Phaser.State {
                 alpha: 0.5,
             },
         };
-
-        this.bullet = this.initCircleItem(bulletProps);
-        this.bullet.speed = 200;
-        this.bullet.checkWorldBounds = true;
-        this.bullet.collideWorldBounds = true;
-        this.bullet.events.onOutOfBounds.add(this.resetBullet, this);
-    }
-
-    resetBullet() {
-        this.bullet.reset(this.player.x, this.player.y);
-        this.game.input.onDown.add(this.fire, this);
     }
 
     initPlayer() {
@@ -113,19 +103,24 @@ class GameState extends Phaser.State {
         const playerY = this.game.height / 5 * 4;
         this.placePlayer(playerX, playerY);
         this.initBullet();
-        // this.game.add.weapon(1, this.bullet);
+        this.weapon = this.game.add.weapon(2, 'bullet');
+        this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+        this.weapon.bulletSpeed = 600;
+        this.weapon.fireRate = 100;
+
 
         this.initEnemy();
-        this.placeEnemy(this.enemy.width, 50);
+        // this.placeEnemy(this.enemy.width, 50);
+        this.weapon.trackSprite(this.player, 0, 0);
 
         this.initScore();
         this.updateScore();
 
-        this.game.physics.enable([this.enemy, this.bullet], Phaser.Physics.ARCADE, true);
+        this.game.physics.enable([this.enemy, this.weapon.bullets], Phaser.Physics.ARCADE, true);
     }
 
     update() {
-        this.game.physics.arcade.overlap(this.bullet, this.enemy, this.collisionHandler, null, this);
+        this.game.physics.arcade.overlap(this.weapon.bullets, this.enemy, this.collisionHandler, null, this);
     }
 
     collisionHandler() {
@@ -165,20 +160,7 @@ class GameState extends Phaser.State {
     }
 
     fire() {
-        this.game.input.onDown.remove(this.fire, this);
-
-        this.bullet.body.velocity.y = -this.bullet.speed;
-
-        // this.bulletTween = this.game.add.tween(this.bullet);
-        // this.bulletTween.to(
-        //     {
-        //         y: -this.bullet.width
-        //     },
-        //     500,
-        //     "Linear",
-        //     true,
-        // );
-        // this.bulletTween.onComplete.add(this.die, this);
+        this.weapon.fire();
     }
 
     moveEnemy() {
