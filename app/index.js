@@ -1,3 +1,5 @@
+import {GraphicUtil} from "./utils/graphic-util";
+
 class GameProcess extends Phaser.Game {
     constructor() {
         super(...arguments);
@@ -12,20 +14,6 @@ class GameState extends Phaser.State {
 
     preload() {
         this.game.load.image('bullet', 'shmup-bullet.png');
-    }
-
-    initCircleItem(itemProps) {
-        const lineStyle = itemProps.lineStyle;
-        const circle = itemProps.circle;
-        const graphicObject = this.game.add.graphics(0, 0);
-        graphicObject.beginFill(itemProps.color);
-        graphicObject.lineStyle(lineStyle.width, lineStyle.color, lineStyle.alpha);
-        graphicObject.drawCircle(circle.x, circle.y, circle.diameter);
-
-        const item = this.game.add.sprite(itemProps.x, itemProps.y, null);
-        item.addChild(graphicObject);
-
-        return item;
     }
 
     initEnemy() {
@@ -47,25 +35,7 @@ class GameState extends Phaser.State {
             },
         };
 
-        this.enemy = this.initCircleItem(enemyProps);
-    }
-
-    initBullet() {
-        const bulletProps = {
-            x: this.player.x,
-            y: this.player.y,
-            color: 0x555555,
-            circle: {
-                x: 0,
-                y: 0,
-                diameter: 10,
-            },
-            lineStyle: {
-                width: 2,
-                color: 0xffffff,
-                alpha: 0.5,
-            },
-        };
+        this.enemy = GraphicUtil.initCircleItem(enemyProps, this.game);
     }
 
     initPlayer() {
@@ -85,7 +55,7 @@ class GameState extends Phaser.State {
             },
         };
 
-        this.player = this.initCircleItem(playerProps);
+        this.player = GraphicUtil.initCircleItem(playerProps, this.game);
     }
 
     initScore() {
@@ -102,7 +72,6 @@ class GameState extends Phaser.State {
         const playerX = this.game.width / 2;
         const playerY = this.game.height / 5 * 4;
         this.placePlayer(playerX, playerY);
-        this.initBullet();
         this.weapon = this.game.add.weapon(2, 'bullet');
         this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         this.weapon.bulletSpeed = 600;
@@ -114,23 +83,20 @@ class GameState extends Phaser.State {
         this.weapon.trackSprite(this.player, 0, 0);
 
         this.initScore();
-        this.updateScore();
-
         this.game.physics.enable([this.enemy, this.weapon.bullets], Phaser.Physics.ARCADE, true);
+        this.enemy.body.gravity.y = 10;
+        this.enemy.body.allowGravity = true;
+
+        this.updateScore();
     }
 
     update() {
         this.game.physics.arcade.overlap(this.weapon.bullets, this.enemy, this.collisionHandler, null, this);
     }
 
-    collisionHandler() {
-        this.enemyTween.stop();
+    collisionHandler(enemy, bullet) {
+        bullet.kill();
         this.score++;
-        this.placeEnemy();
-        const playerX = this.game.width / 2;
-        const playerY = this.game.height / 5 * 4;
-        this.resetBullet();
-        this.placePlayer(playerX, playerY);
         this.updateScore();
     }
 
@@ -144,16 +110,6 @@ class GameState extends Phaser.State {
         this.game.input.onDown.add(this.fire, this);
     }
 
-    placeEnemy(x, y) {
-        this.enemy.x = x;
-        this.enemy.y = y;
-        this.enemyTween = this.game.add.tween(this.enemy)
-            .to({
-                y: this.game.rnd.between(this.enemy.width * 2, this.game.height / 4 * 3 - this.player.width / 2)
-            }, 200, "Linear", true);
-        this.enemyTween.onComplete.add(this.moveEnemy, this);
-    }
-
     die() {
         localStorage.setItem("topboomdots", Math.max(this.score, this.topScore));
         this.game.state.start("Play");
@@ -161,30 +117,6 @@ class GameState extends Phaser.State {
 
     fire() {
         this.weapon.fire();
-    }
-
-    moveEnemy() {
-        this.enemyTween = this.game.add
-            .tween(this.enemy);
-        const movementProperties = {
-            x: this.game.world.width - this.enemy.width / 2,
-        };
-        const movementVelocity = 500 + this.game.rnd.between(0, 2500);
-        const ease = Phaser.Easing.Cubic.InOut;
-        const autoStart = true;
-        const delay = 0;
-        const repeat = 50;
-        const yoyo = true;
-
-        this.enemyTween.to(
-            movementProperties,
-            movementVelocity,
-            ease,
-            autoStart,
-            delay,
-            repeat,
-            yoyo,
-        );
     }
 }
 
