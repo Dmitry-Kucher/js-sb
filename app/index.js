@@ -76,18 +76,27 @@ class GameState extends Phaser.State {
         this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         this.weapon.bulletSpeed = 600;
         this.weapon.fireRate = 100;
-
-
-        this.initEnemy();
-        // this.placeEnemy(this.enemy.width, 50);
         this.weapon.trackSprite(this.player, 0, 0);
 
+        this.initEnemy();
+
         this.initScore();
+
         this.game.physics.enable([this.enemy, this.weapon.bullets], Phaser.Physics.ARCADE, true);
         this.enemy.body.gravity.y = 10;
         this.enemy.body.allowGravity = true;
+        this.enemy.checkWorldBounds = true;
+        this.enemy.events.onOutOfBounds.add(this.reset, this);
 
         this.updateScore();
+    }
+
+    reset() {
+        const x = this.game.width / 2;
+        const y = 40;
+        this.enemy.x = x;
+        this.enemy.y = y;
+        this.enemy.body.gravity.y = 10;
     }
 
     update() {
