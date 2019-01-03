@@ -24,7 +24,7 @@ class Player {
 	}
 
 	spawn() {
-		GraphicUtil.initCircleItem(this.playerProps, this.game);
+		return GraphicUtil.initCircleItem(this.playerProps, this.game);
 	}
 
 }

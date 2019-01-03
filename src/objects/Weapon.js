@@ -17,7 +17,11 @@ class Weapon {
     }
     
     addControls (){
-        this.game.input.onDown.add(this.weapon.fire, this);
+        this.game.input.onDown.add(this.fire, this);
+    }
+
+    fire() {
+        this.weapon.fire();
     }
 
 }

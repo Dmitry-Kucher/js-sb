@@ -11,8 +11,8 @@ class Main extends Phaser.State {
 		//Enable Arcade Physics
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-		const player = new Player(this.game);
-		player.spawn();
+		const playerWrapper = new Player(this.game);
+		const player = playerWrapper.spawn();
 
 		const weapon = new Weapon(this.game);
 		weapon.spawn(player);
