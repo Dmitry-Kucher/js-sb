@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
+import {GraphicUtil} from '../utils/graphic-util';
 
 class Preload extends Phaser.State {
 
 	preload() {
-		this.game.load.image('bullet', 'assets/shmup-bullet.png');
+		this.game.load.image(GraphicUtil.bulletGraphicName, 'assets/shmup-bullet.png');
 	}
 
 	create() {

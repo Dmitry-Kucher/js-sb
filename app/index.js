@@ -72,6 +72,8 @@ class GameState extends Phaser.State {
         const playerX = this.game.width / 2;
         const playerY = this.game.height / 5 * 4;
         this.placePlayer(playerX, playerY);
+
+        
         this.weapon = this.game.add.weapon(2, 'bullet');
         this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         this.weapon.bulletSpeed = 600;
