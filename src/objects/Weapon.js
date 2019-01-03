@@ -14,6 +14,8 @@ class Weapon {
         this.weapon.bulletSpeed = 600;
         this.weapon.fireRate = 100;
         this.weapon.trackSprite(spriteToTrack, 0, 0);
+        
+        return this.weapon;
     }
     
     addControls (){

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../objects/Player';
 import Weapon from '../objects/Weapon';
+import Enemy from '../objects/Enemy';
 
 class Main extends Phaser.State {
 
@@ -8,22 +9,26 @@ class Main extends Phaser.State {
 		//Set the games background colour
 		this.game.stage.backgroundColor = '#cecece';
 
-		//Enable Arcade Physics
-		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-
 		const playerWrapper = new Player(this.game);
 		const player = playerWrapper.spawn();
 
-		const weapon = new Weapon(this.game);
-		weapon.spawn(player);
+		const weaponWrapper = new Weapon(this.game);
+		this.weapon = weaponWrapper.spawn(player);
 
-		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+		const enemyWrapper = new Enemy(this.game);
+		this.enemy = enemyWrapper.spawn();
 
-		weapon.addControls();
+		this.game.physics.enable([this.enemy, this.weapon.bullets], Phaser.Physics.ARCADE, true);
+
+		weaponWrapper.addControls();
 	}
 
 	update() {
-		
+		this.game.physics.arcade.overlap(this.weapon.bullets, this.enemy, this.collisionHandler, null, this);
+	}
+
+	collisionHandler(enemy, bullet) {
+		bullet.kill();
 	}
 
 }
