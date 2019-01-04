@@ -8,6 +8,7 @@ before_script:
   - npm install
 script:
   - npm run build
+  - cp -r static/* ./dist
 deploy:
   provider: pages
   skip_cleanup: true
