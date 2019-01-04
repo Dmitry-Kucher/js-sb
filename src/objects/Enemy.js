@@ -23,7 +23,19 @@ class Enemy {
 	}
 
 	spawn() {
-		return GraphicUtil.initCircleItem(this.enemyProps, this.game);
+		this.enemy = GraphicUtil.initCircleItem(this.enemyProps, this.game);
+		this.game.physics.arcade.enable(this.enemy);
+		this.enemy.body.gravity.y = 10;
+        this.enemy.body.allowGravity = true;
+        this.enemy.checkWorldBounds = true;
+        this.enemy.events.onOutOfBounds.add(this.reset, this);
+		return this.enemy;
+	}
+
+	reset() {
+		this.enemy.x = this.enemyProps.x;
+		this.enemy.y = this.enemyProps.y;
+		this.enemy.body.velocity.y = 10;
 	}
 }
 
