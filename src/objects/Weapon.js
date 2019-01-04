@@ -20,6 +20,7 @@ class Weapon {
     
     addControls (){
         this.game.input.onDown.add(this.fire, this);
+        this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).onDown.add(this.fire, this);
     }
 
     fire() {

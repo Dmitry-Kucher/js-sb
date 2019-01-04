@@ -22,10 +22,10 @@ class Enemy {
         };
 	}
 
-	spawn() {
+	spawn({gravity = {x: 0, y: 10}} = {}) {
 		this.enemy = GraphicUtil.initCircleItem(this.enemyProps, this.game);
 		this.game.physics.arcade.enable(this.enemy);
-		this.enemy.body.gravity.y = 10;
+		this.enemy.body.gravity = gravity;
         this.enemy.body.allowGravity = true;
         this.enemy.checkWorldBounds = true;
         this.enemy.events.onOutOfBounds.add(this.reset, this);
