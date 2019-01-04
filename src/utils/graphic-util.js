@@ -14,4 +14,6 @@ class GraphicUtil {
     }
 }
 
+GraphicUtil.bulletGraphicName = 'bullet';
+
 export { GraphicUtil };
