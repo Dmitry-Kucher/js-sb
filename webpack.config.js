@@ -28,7 +28,6 @@ module.exports = {
         publicPath: '/',
         port: 9005,
     },
-    watch: true,
     plugins: [new HtmlWebpackPlugin({
         filename: path.resolve(__dirname, 'dist/index.html'),
         template: path.resolve(__dirname, 'src/index.html')
