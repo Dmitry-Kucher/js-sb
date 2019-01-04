@@ -8,10 +8,11 @@ before_script:
   - npm install
 script:
   - npm run build
-  - cp -r ./dist/* .
+  - cp -r static/* ./dist
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
+  local-dir: dist
   on:
     branch: master
