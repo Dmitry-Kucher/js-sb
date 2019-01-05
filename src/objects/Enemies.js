@@ -1,9 +1,10 @@
+import Phaser from 'phaser';
 import {GraphicUtil} from '../utils/graphic-util';
 
 class Enemies {
 	constructor(game){
 		this.game = game;
-		const x = this.game.width / 2;
+		const x = this.game.width / 2 - 20;
         const y = 40;
 		this.enemyProps = {
             x,
@@ -29,25 +30,18 @@ class Enemies {
 
         this.enemiesGroup = this.game.add.group();
         this.enemiesGroup.enableBody = true;
-        this.enemiesGroup.createMultiple(10, enemyTexture);
+        this.enemiesGroup.createMultiple(30, enemyTexture);
     }
 
 	spawn({gravity = {x: 0, y: 10}} = {}) {
         let enemy = this.enemiesGroup.getFirstDead();
         
-        // this.game.physics.arcade.enable(this.enemy);
         enemy.reset(this.enemyProps.x, this.enemyProps.y);
 		enemy.body.gravity = gravity;
         enemy.body.allowGravity = true;
         enemy.checkWorldBounds = true;
 	    enemy.outOfBoundsKill = true;
 		return enemy;
-	}
-
-	reset() {
-		this.enemy.x = this.enemyProps.x;
-		this.enemy.y = this.enemyProps.y;
-		this.enemy.body.velocity.y = 10;
 	}
 }
 

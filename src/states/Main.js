@@ -28,11 +28,17 @@ class Main extends Phaser.State {
 		this.game.physics.arcade.overlap(this.weapon.bullets, this.enemies, this.collisionHandler, null, this);
 	}
 
+	render() {
+		this.game.debug.text('Living: ' + this.enemies.countLiving() + '   Dead: ' + this.enemies.countDead(), 32, 64);
+	}
+
 	collisionHandler(enemy, bullet) {
-		enemy.kill();
-		bullet.kill();
-		this.enemyWrapper.spawn({gravity:{x: -5, y: 10}});
-		this.enemyWrapper.spawn({gravity:{x: 5, y: 10}});
+		if(bullet.alive && enemy.alive){ // keep condition to trigger collision handler only once
+			bullet.kill();
+			enemy.kill();
+			this.enemyWrapper.spawn({gravity:{x: -5, y: 10}});
+			this.enemyWrapper.spawn({gravity:{x: 5, y: 10}});
+		}
 	}
 
 }
