@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import Player from '../objects/Player';
 import Weapon from '../objects/Weapon';
-import Enemy from '../objects/Enemy';
+import Enemies from '../objects/Enemies';
 
 class Main extends Phaser.State {
 
@@ -15,20 +15,24 @@ class Main extends Phaser.State {
 		const weaponWrapper = new Weapon(this.game);
 		this.weapon = weaponWrapper.spawn(player);
 
-		const enemyWrapper = new Enemy(this.game);
-		this.enemy = enemyWrapper.spawn();
+		this.enemyWrapper = new Enemies(this.game);
+		this.enemies = this.enemyWrapper.enemiesGroup;
+		this.enemy = this.enemyWrapper.spawn();
 
-		this.game.physics.enable([this.enemy, this.weapon.bullets], Phaser.Physics.ARCADE, true);
+		this.game.physics.enable([this.enemies, this.weapon.bullets], Phaser.Physics.ARCADE, true);
 
 		weaponWrapper.addControls();
 	}
 
 	update() {
-		this.game.physics.arcade.overlap(this.weapon.bullets, this.enemy, this.collisionHandler, null, this);
+		this.game.physics.arcade.overlap(this.weapon.bullets, this.enemies, this.collisionHandler, null, this);
 	}
 
 	collisionHandler(enemy, bullet) {
+		enemy.kill();
 		bullet.kill();
+		this.enemyWrapper.spawn({gravity:{x: -5, y: 10}});
+		this.enemyWrapper.spawn({gravity:{x: 5, y: 10}});
 	}
 
 }
