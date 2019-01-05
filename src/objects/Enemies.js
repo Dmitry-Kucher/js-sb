@@ -40,7 +40,7 @@ class Enemies {
 		enemy.body.gravity = gravity;
         enemy.body.allowGravity = true;
         enemy.checkWorldBounds = true;
-        enemy.events.onOutOfBounds.add(this.reset, this);
+	    enemy.outOfBoundsKill = true;
 		return enemy;
 	}
 
