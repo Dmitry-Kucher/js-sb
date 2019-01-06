@@ -7,12 +7,14 @@ import Preload from './states/Preload';
 import GameTitle from './states/GameTitle';
 import Main from './states/Main';
 import GameOver from './states/GameOver';
+import {PHYSICAL_PROPERTIES} from './utils/physical-properties';
 
 class Game extends Phaser.Game {
 
 	constructor() {
 
 		super(...arguments);
+		this.PHYSICAL_PROPERTIES = PHYSICAL_PROPERTIES;
 
 		this.state.add('Boot', Boot, false);
 		this.state.add('Preload', Preload, false);
