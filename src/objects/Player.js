@@ -4,7 +4,7 @@ import {GraphicUtil} from '../utils/graphic-util';
 class Player {
 	constructor(game){
 		this.game = game;
-		const x = this.game.width / 2 - 10;
+		const x = this.game.width / 2 - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
         const y = this.game.height / 5 * 4;
 		this.playerProps = {
             x,
@@ -13,7 +13,7 @@ class Player {
             circle: {
                 x: 0,
                 y: 0,
-                diameter: 20,
+                diameter: this.game.PHYSICAL_PROPERTIES.player.diameter,
             },
             lineStyle: {
                 width: 2,

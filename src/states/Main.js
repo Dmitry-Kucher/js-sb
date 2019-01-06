@@ -37,9 +37,9 @@ class Main extends Phaser.State {
 
 	collisionHandler(enemy, bullet) {
 		if(bullet.alive && enemy.alive){ // keep condition to trigger collision handler only once
+			this.enemyWrapper.onCollide(enemy);
 			bullet.kill();
 			enemy.kill();
-			this.enemyWrapper.onCollide();
 		}
 	}
 
