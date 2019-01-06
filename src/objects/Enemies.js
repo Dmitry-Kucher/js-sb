@@ -33,16 +33,39 @@ class Enemies {
         this.enemiesGroup.createMultiple(30, enemyTexture);
     }
 
-	spawn({gravity = {x: 0, y: 10}} = {}) {
+	spawn({gravity = {x: 0, y: 10}, velocity = {x: 0, y: 0}} = {}) {
         let enemy = this.enemiesGroup.getFirstDead();
         
         enemy.reset(this.enemyProps.x, this.enemyProps.y);
-		enemy.body.gravity = gravity;
+		enemy.body.gravity.y = gravity.y;
+		enemy.body.velocity.x = velocity.x;
         enemy.body.allowGravity = true;
         enemy.checkWorldBounds = true;
 	    enemy.outOfBoundsKill = true;
 		return enemy;
-	}
+    }
+    
+    onCollide() {
+        const spawnLeft = {
+            gravity: {
+                y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
+            },
+            velocity: {
+                x: -this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
+            }
+        };
+        const spawnRight = {
+            gravity: {
+                y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
+            },
+            velocity: {
+                x: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
+            }
+        };
+
+        this.spawn(spawnLeft);
+        this.spawn(spawnRight);
+    }
 }
 
 export default Enemies;
