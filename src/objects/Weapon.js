@@ -18,7 +18,7 @@ class Weapon {
         return this.weapon;
     }
     
-    addControls (){
+    addControls() {
         this.game.input.onDown.add(this.fire, this);
         this.game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR).onDown.add(this.fire, this);
     }

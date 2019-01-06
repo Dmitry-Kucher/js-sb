@@ -6,11 +6,11 @@ import Enemies from '../objects/Enemies';
 class Main extends Phaser.State {
 
 	create() {
-		//Set the games background colour
 		this.game.stage.backgroundColor = '#cecece';
 
 		const playerWrapper = new Player(this.game);
 		const player = playerWrapper.spawn();
+		playerWrapper.addControls();
 
 		const weaponWrapper = new Weapon(this.game);
 		this.weapon = weaponWrapper.spawn(player);

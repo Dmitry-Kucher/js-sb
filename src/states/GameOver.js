@@ -3,7 +3,6 @@ import Phaser from 'phaser';
 class GameOver extends Phaser.State {
 
 	create() {
-		// this.restartGame();
 		const style = {
             align: "center"
         };
