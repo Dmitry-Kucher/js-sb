@@ -43,7 +43,29 @@ class Enemies {
         enemy.checkWorldBounds = true;
 	    enemy.outOfBoundsKill = true;
 		return enemy;
-	}
+    }
+    
+    onCollide() {
+        const spawnLeft = {
+            gravity: {
+                y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
+            },
+            velocity: {
+                x: -this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
+            }
+        };
+        const spawnRight = {
+            gravity: {
+                y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
+            },
+            velocity: {
+                x: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
+            }
+        };
+
+        this.spawn(spawnLeft);
+        this.spawn(spawnRight);
+    }
 }
 
 export default Enemies;

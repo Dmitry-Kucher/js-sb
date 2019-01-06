@@ -39,24 +39,7 @@ class Main extends Phaser.State {
 		if(bullet.alive && enemy.alive){ // keep condition to trigger collision handler only once
 			bullet.kill();
 			enemy.kill();
-			const spawnLeft = {
-				gravity: {
-					y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
-				},
-				velocity: {
-					x: -this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
-				}
-			};
-			const spawnRight = {
-				gravity: {
-					y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
-				},
-				velocity: {
-					x: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
-				}
-			};;
-			this.enemyWrapper.spawn(spawnLeft);
-			this.enemyWrapper.spawn(spawnRight);
+			this.enemyWrapper.onCollide();
 		}
 	}
 
