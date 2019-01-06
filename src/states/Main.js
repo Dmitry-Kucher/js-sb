@@ -26,6 +26,9 @@ class Main extends Phaser.State {
 
 	update() {
 		this.game.physics.arcade.overlap(this.weapon.bullets, this.enemies, this.collisionHandler, null, this);
+		if(!this.enemies.countLiving()) {
+			this.game.state.start("GameOver");
+		}
 	}
 
 	render() {
