@@ -4,16 +4,16 @@ class Weapon {
 
 	constructor(game){
 		this.game = game;
-        this.weaponPool = 2;
+        this.weaponPool = this.game.PHYSICAL_PROPERTIES.bullet.poolSize;
         this.weaponGraphicName = GraphicUtil.bulletGraphicName;
 	}
 
 	spawn(spriteToTrack) {
         this.weapon = this.game.add.weapon(this.weaponPool, this.weaponGraphicName);
         this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-        this.weapon.bulletSpeed = 600;
-        this.weapon.fireRate = 100;
-        this.weapon.trackSprite(spriteToTrack, 0, 0);
+        this.weapon.bulletSpeed = this.game.PHYSICAL_PROPERTIES.bullet.speed;
+        this.weapon.fireRate = this.game.PHYSICAL_PROPERTIES.bullet.fireRate;
+        this.weapon.trackSprite(spriteToTrack, this.game.PHYSICAL_PROPERTIES.player.diameter / 2, 0);
         
         return this.weapon;
     }
