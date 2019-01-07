@@ -4,7 +4,7 @@ class Weapon {
 
 	constructor(game){
 		this.game = game;
-        this.weaponPool = 2;
+        this.weaponPool = this.game.PHYSICAL_PROPERTIES.bullet.poolSize;
         this.weaponGraphicName = GraphicUtil.bulletGraphicName;
 	}
 

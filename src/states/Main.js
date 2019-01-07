@@ -35,7 +35,7 @@ class Main extends Phaser.State {
 		this.game.debug.text('Living: ' + this.enemies.countLiving() + '   Dead: ' + this.enemies.countDead(), 32, 64);
 	}
 
-	collisionHandler(enemy, bullet) {
+	collisionHandler(bullet, enemy) {
 		if(bullet.alive && enemy.alive){ // keep condition to trigger collision handler only once
 			this.enemyWrapper.onCollide(enemy);
 			bullet.kill();

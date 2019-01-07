@@ -21,6 +21,7 @@ class Enemies {
                 alpha: 0.5,
             },
         };
+        this.poolSize = this.game.PHYSICAL_PROPERTIES.enemies.poolSize;
         this.initEnemiesGroup();
     }
     
@@ -30,12 +31,12 @@ class Enemies {
 
         this.enemiesGroup = this.game.add.group();
         this.enemiesGroup.enableBody = true;
-        this.enemiesGroup.createMultiple(30, enemyTexture);
+        this.enemiesGroup.createMultiple(this.poolSize, enemyTexture);
     }
 
 	spawn(spawnProperties) {
         const properties = {
-            gravity: {x: 0, y: 10},
+            gravity: {x: 0, y: 20},
             velocity: {x: 0, y: 0},
             position: {x: this.enemyProps.x, y: this.enemyProps.y},
         };
@@ -55,9 +56,7 @@ class Enemies {
         const gravity = {
             y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
         };
-        const positionX = hurtEnemy.x;
-        const positionY = hurtEnemy.y - this.game.PHYSICAL_PROPERTIES.enemies.diameter - 20;
-        const position = {x: positionX, y: positionY};
+        const position = {x: hurtEnemy.x, y: hurtEnemy.y};
         const spawnLeft = {
             gravity,
             position,
