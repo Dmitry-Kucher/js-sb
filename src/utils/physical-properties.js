@@ -10,7 +10,6 @@ const PHYSICAL_PROPERTIES = {
             },
         },
         diameter: 30,
-        poolSize: 50,
     },
     player: {
         diameter: 20,

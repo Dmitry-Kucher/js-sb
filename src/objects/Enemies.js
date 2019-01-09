@@ -21,17 +21,14 @@ class Enemies {
                 alpha: 0.5,
             },
         };
-        this.poolSize = this.game.PHYSICAL_PROPERTIES.enemies.poolSize;
+        const enemy = GraphicUtil.getCircleItem(this.enemyProps, this.game);
+        this.enemyTexture = enemy.generateTexture();
         this.initEnemiesGroup();
     }
-    
-    initEnemiesGroup() {
-        const enemy = GraphicUtil.getCircleItem(this.enemyProps, this.game);
-        const enemyTexture = enemy.generateTexture();
 
+    initEnemiesGroup() {
         this.enemiesGroup = this.game.add.group();
         this.enemiesGroup.enableBody = true;
-        this.enemiesGroup.createMultiple(this.poolSize, enemyTexture);
     }
 
 	spawn(spawnProperties) {
@@ -39,29 +36,26 @@ class Enemies {
             gravity: {x: 0, y: 20},
             velocity: {x: 0, y: 0},
             position: {x: this.enemyProps.x, y: this.enemyProps.y},
+            moveTo: false,
         };
         Object.assign(properties, spawnProperties);
-        let enemy = this.enemiesGroup.getFirstDead();
-        
-        enemy.reset(properties.position.x, properties.position.y);
-        if(this.enemiesGroup.countLiving() > 1) {
+        let enemy = this.enemiesGroup.getFirstDead(true, properties.position.x, properties.position.y, this.enemyTexture);
+
+        if(properties.moveTo) {
             enemy.body.toRestore = {
                 velocity: {x: properties.velocity.x},
                 gravity: {y: properties.gravity.y},
             };
-            enemy.body.gravity.y = 0;
-            enemy.body.velocity.x = 0;
             const angle = properties.velocity.x > 0 ? 315 : 225;
             enemy.body.moveTo(500, this.game.PHYSICAL_PROPERTIES.enemies.diameter, angle);
         } else {
             enemy.body.velocity.x = properties.velocity.x;
-            enemy.body.gravity.y = properties.gravity.y;
         }
         enemy.checkWorldBounds = true;
 	    enemy.outOfBoundsKill = true;
 		return enemy;
     }
-    
+
     onCollide(hurtEnemy) {
         const gravity = {
             y: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.gravity.y,
@@ -73,6 +67,7 @@ class Enemies {
             velocity: {
                 x: -this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
             },
+            moveTo: true,
         };
         const spawnRight = {
             gravity,
@@ -80,20 +75,17 @@ class Enemies {
             velocity: {
                 x: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
             },
+            moveTo: true,
         };
 
         const left = this.spawn(spawnLeft);
         const right = this.spawn(spawnRight);
-        // left.body.moveTo(500, this.game.PHYSICAL_PROPERTIES.enemies.diameter, 225);
-        left.body.onMoveComplete.add(this.restorePhysics, this, 0, left);
-
-        // right.body.moveTo(500, this.game.PHYSICAL_PROPERTIES.enemies.diameter, 315);
-        right.body.onMoveComplete.add(this.restorePhysics, this, 0, right);
+        left.body.onMoveComplete.addOnce(this.restorePhysics, this, 0, left);
+        right.body.onMoveComplete.addOnce(this.restorePhysics, this, 0, right);
     }
 
     restorePhysics(enemyForRestoration) {
         enemyForRestoration.body.velocity.x = enemyForRestoration.body.toRestore.velocity.x;
-		enemyForRestoration.body.gravity.y = enemyForRestoration.body.toRestore.gravity.y;
     }
 }
 

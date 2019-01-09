@@ -32,7 +32,7 @@ class Player {
         this.playerSprite.body.collideWorldBounds = true;
 		return this.playerSprite;
     }
-    
+
     addControls() {
         const leftKey = this.game.input.keyboard.addKey(Phaser.KeyCode.LEFT);
         const rightKey = this.game.input.keyboard.addKey(Phaser.KeyCode.RIGHT);
