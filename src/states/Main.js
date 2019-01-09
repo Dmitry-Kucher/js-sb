@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import Player from '../objects/Player';
 import Weapon from '../objects/Weapon';
 import Enemies from '../objects/Enemies';
+import Score from '../objects/Score';
 
 class Main extends Phaser.State {
 
@@ -14,6 +15,7 @@ class Main extends Phaser.State {
 
 		const weaponWrapper = new Weapon(this.game);
 		this.weapon = weaponWrapper.spawn(player);
+		weaponWrapper.addControls();
 
 		this.enemyWrapper = new Enemies(this.game);
 		this.enemies = this.enemyWrapper.enemiesGroup;
@@ -21,13 +23,15 @@ class Main extends Phaser.State {
 
 		this.game.physics.enable([this.enemies, this.weapon.bullets], Phaser.Physics.ARCADE, true);
 		this.game.physics.arcade.gravity.y = this.game.PHYSICAL_PROPERTIES.world.gravity.y;
-
-		weaponWrapper.addControls();
+		
+		this.score = new Score(this.game);
 	}
 
 	update() {
+		// this.score.incrementScore();
 		this.game.physics.arcade.overlap(this.weapon.bullets, this.enemies, this.collisionHandler, null, this);
 		if(!this.enemies.countLiving()) {
+			this.game.finalScore = this.score.score;
 			this.game.state.start("GameOver");
 		}
 	}
@@ -41,6 +45,9 @@ class Main extends Phaser.State {
 			bullet.kill();
 			enemy.destroy();
 			this.enemyWrapper.onCollide(enemy);
+			const incrementValue = (this.enemies.countLiving() - 1) * this.game.PHYSICAL_PROPERTIES.score.incrementValue;
+			this.score.createScoreAnimation(enemy.x, enemy.y, incrementValue);
+			// this.score.incrementScore(incrementValue);
 		}
 	}
 
