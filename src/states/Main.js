@@ -32,6 +32,7 @@ class Main extends Phaser.State {
 	}
 
 	render() {
+		this.game.debug.spriteInfo(this.enemy);
 		this.game.debug.text('Living: ' + this.enemies.countLiving() + '   Dead: ' + this.enemies.countDead(), 32, 64);
 	}
 

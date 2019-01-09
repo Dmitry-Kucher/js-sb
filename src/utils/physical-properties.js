@@ -6,17 +6,17 @@ const PHYSICAL_PROPERTIES = {
                 x: 10,
             },
             velocity: {
-                x: 25,
+                x: 50,
             },
         },
-        diameter: 40,
+        diameter: 30,
         poolSize: 50,
     },
     player: {
         diameter: 20,
     },
     bullet: {
-        speed: 600,
+        speed: 200,
         fireRate: 100,
         poolSize: 2,
     }

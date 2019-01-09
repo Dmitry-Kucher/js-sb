@@ -44,9 +44,19 @@ class Enemies {
         let enemy = this.enemiesGroup.getFirstDead();
         
         enemy.reset(properties.position.x, properties.position.y);
-		enemy.body.gravity.y = properties.gravity.y;
-		enemy.body.velocity.x = properties.velocity.x;
-        enemy.body.allowGravity = true;
+        if(this.enemiesGroup.countLiving() > 1) {
+            enemy.body.toRestore = {
+                velocity: {x: properties.velocity.x},
+                gravity: {y: properties.gravity.y},
+            };
+            enemy.body.gravity.y = 0;
+            enemy.body.velocity.x = 0;
+            const angle = properties.velocity.x > 0 ? 315 : 225;
+            enemy.body.moveTo(500, this.game.PHYSICAL_PROPERTIES.enemies.diameter, angle);
+        } else {
+            enemy.body.velocity.x = properties.velocity.x;
+            enemy.body.gravity.y = properties.gravity.y;
+        }
         enemy.checkWorldBounds = true;
 	    enemy.outOfBoundsKill = true;
 		return enemy;
@@ -62,18 +72,28 @@ class Enemies {
             position,
             velocity: {
                 x: -this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
-            }
+            },
         };
         const spawnRight = {
             gravity,
             position,
             velocity: {
                 x: this.game.PHYSICAL_PROPERTIES.enemies.onHurt.velocity.x,
-            }
+            },
         };
 
-        this.spawn(spawnLeft);
-        this.spawn(spawnRight);
+        const left = this.spawn(spawnLeft);
+        const right = this.spawn(spawnRight);
+        // left.body.moveTo(500, this.game.PHYSICAL_PROPERTIES.enemies.diameter, 225);
+        left.body.onMoveComplete.add(this.restorePhysics, this, 0, left);
+
+        // right.body.moveTo(500, this.game.PHYSICAL_PROPERTIES.enemies.diameter, 315);
+        right.body.onMoveComplete.add(this.restorePhysics, this, 0, right);
+    }
+
+    restorePhysics(enemyForRestoration) {
+        enemyForRestoration.body.velocity.x = enemyForRestoration.body.toRestore.velocity.x;
+		enemyForRestoration.body.gravity.y = enemyForRestoration.body.toRestore.gravity.y;
     }
 }
 
