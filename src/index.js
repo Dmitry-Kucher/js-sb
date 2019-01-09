@@ -27,6 +27,6 @@ class Game extends Phaser.Game {
 
 }
 
-const width = 320;
-const height = 480;
+const width = PHYSICAL_PROPERTIES.world.dimensions.width;
+const height = PHYSICAL_PROPERTIES.world.dimensions.height;
 new Game(width * window.devicePixelRatio, height * window.devicePixelRatio, Phaser.AUTO);
