@@ -18,6 +18,11 @@ const PHYSICAL_PROPERTIES = {
         speed: 200,
         fireRate: 100,
         poolSize: 2,
+    },
+    world: {
+        gravity: {
+            y: 20,
+        },
     }
 };
 

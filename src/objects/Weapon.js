@@ -12,6 +12,7 @@ class Weapon {
         this.weapon = this.game.add.weapon(this.weaponPool, this.weaponGraphicName);
         this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         this.weapon.bulletSpeed = this.game.PHYSICAL_PROPERTIES.bullet.speed;
+        this.weapon.bulletGravity.y = -this.game.PHYSICAL_PROPERTIES.world.gravity.y;
         this.weapon.fireRate = this.game.PHYSICAL_PROPERTIES.bullet.fireRate;
         this.weapon.trackSprite(spriteToTrack, this.game.PHYSICAL_PROPERTIES.player.diameter / 2, 0);
         
