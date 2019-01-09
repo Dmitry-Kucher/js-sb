@@ -20,6 +20,7 @@ class Main extends Phaser.State {
 		this.enemy = this.enemyWrapper.spawn();
 
 		this.game.physics.enable([this.enemies, this.weapon.bullets], Phaser.Physics.ARCADE, true);
+		this.game.physics.arcade.gravity.y = 20;
 
 		weaponWrapper.addControls();
 	}
@@ -37,9 +38,9 @@ class Main extends Phaser.State {
 
 	collisionHandler(bullet, enemy) {
 		if(bullet.alive && enemy.alive){ // keep condition to trigger collision handler only once
-			this.enemyWrapper.onCollide(enemy);
 			bullet.kill();
-			enemy.kill();
+			enemy.destroy();
+			this.enemyWrapper.onCollide(enemy);
 		}
 	}
 

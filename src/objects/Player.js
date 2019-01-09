@@ -5,7 +5,7 @@ class Player {
 	constructor(game){
 		this.game = game;
 		const x = this.game.width / 2 - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
-        const y = this.game.height / 5 * 4;
+        const y = this.game.height - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
 		this.playerProps = {
             x,
             y,
@@ -30,10 +30,9 @@ class Player {
         this.playerSprite = this.game.add.sprite(this.playerProps.x, this.playerProps.y, playerTexture);
         this.game.physics.arcade.enable(this.playerSprite);
         this.playerSprite.body.collideWorldBounds = true;
-        this.playerSprite.body.bounce.set(0);
 		return this.playerSprite;
     }
-    
+
     addControls() {
         const leftKey = this.game.input.keyboard.addKey(Phaser.KeyCode.LEFT);
         const rightKey = this.game.input.keyboard.addKey(Phaser.KeyCode.RIGHT);
