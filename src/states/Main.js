@@ -20,7 +20,7 @@ class Main extends Phaser.State {
 		this.enemy = this.enemyWrapper.spawn();
 
 		this.game.physics.enable([this.enemies, this.weapon.bullets], Phaser.Physics.ARCADE, true);
-		this.game.physics.arcade.gravity.y = 20;
+		this.game.physics.arcade.gravity.y = this.game.PHYSICAL_PROPERTIES.world.gravity.y;
 
 		weaponWrapper.addControls();
 	}
