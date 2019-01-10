@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
 import {GraphicUtil} from '../utils/graphic-util';
+import GyroNorm from 'gyronorm';
 
 class Player {
 	constructor(game){
-		this.game = game;
+        this.game = game;
 		const x = this.game.world.centerX - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
         const y = this.game.height - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
 		this.playerProps = {
@@ -42,6 +43,22 @@ class Player {
         rightKey.onHoldCallback = this.moveRight;
         leftKey.onUp.add(this.stopMovement, this);
         rightKey.onUp.add(this.stopMovement, this);
+    }
+
+    async initGyroScopeControl() {
+        let gn = await (new GyroNorm().init());
+        if(!gn.isAvailable()) {
+            return;
+        }
+        gn.start((data) => {
+            if(data.do.gamma > 10) {
+                this.moveRight();
+            } else if (data.do.gamma < -10) {
+                this.moveLeft();
+            } else {
+                this.stopMovement();
+            }
+        });
     }
 
     moveLeft() {

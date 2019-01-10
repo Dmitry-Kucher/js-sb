@@ -6,6 +6,7 @@ const phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
 const phaser = path.join(phaserModule, 'build/custom/phaser-split.js');
 const pixi = path.join(phaserModule, 'build/custom/pixi.js');
 const p2 = path.join(phaserModule, 'build/custom/p2.js');
+const gyronorm = path.join(__dirname, '/node_modules/gyronorm/dist/gyronorm.complete.min.js');
 
 module.exports = {
     mode: 'development',
@@ -14,7 +15,7 @@ module.exports = {
             '@babel/polyfill',
             path.resolve(__dirname, 'src/index.js')
         ],
-        vendor: ['pixi', 'p2', 'phaser'] //do not change the order it causes the following error: "PIXI.Point is not a constructor"
+        vendor: ['pixi', 'p2', 'phaser', 'gyronorm'] //do not change the order it causes the following error: "PIXI.Point is not a constructor"
     },
     output: {
         pathinfo: true,
@@ -50,6 +51,10 @@ module.exports = {
                 test: /p2\.js$/,
                 use: ['expose-loader?p2']
             },
+            {
+                test: /gyronorm\.complete\.min\.js$/,
+                use: ['expose-loader?GyroNorm']
+            },
         ]
     },
     resolve: {
@@ -57,6 +62,7 @@ module.exports = {
             'phaser': phaser,
             'pixi': pixi,
             'p2': p2,
+            'gyronorm': gyronorm,
         }
     }
 };
