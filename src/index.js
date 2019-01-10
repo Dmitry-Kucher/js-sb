@@ -8,6 +8,7 @@ import GameTitle from './states/GameTitle';
 import Main from './states/Main';
 import GameOver from './states/GameOver';
 import {PHYSICAL_PROPERTIES} from './utils/physical-properties';
+import {GraphicUtil} from "./utils/graphic-util";
 
 class Game extends Phaser.Game {
 
@@ -29,4 +30,4 @@ class Game extends Phaser.Game {
 
 const width = PHYSICAL_PROPERTIES.world.dimensions.width;
 const height = PHYSICAL_PROPERTIES.world.dimensions.height;
-new Game(width * window.devicePixelRatio, height * window.devicePixelRatio, Phaser.AUTO);
+new Game(width, height, Phaser.AUTO);

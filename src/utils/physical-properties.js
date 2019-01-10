@@ -1,37 +1,40 @@
+import {GraphicUtil} from "./graphic-util";
+
 const PHYSICAL_PROPERTIES = {
     enemies: {
         onHurt: {
             gravity: {
-                y: 20,
-                x: 10,
+                y: GraphicUtil.adjustPixelToDevice(20),
+                x:  GraphicUtil.adjustPixelToDevice(10),
             },
             velocity: {
-                x: 50,
+                x:  GraphicUtil.adjustPixelToDevice(50),
             },
         },
-        diameter: 30,
+        diameter:  GraphicUtil.adjustPixelToDevice(30),
     },
     player: {
-        diameter: 20,
+        diameter:  GraphicUtil.adjustPixelToDevice(20),
+        movementValue: GraphicUtil.adjustPixelToDevice(5),
     },
     bullet: {
-        speed: 200,
+        speed:  GraphicUtil.adjustPixelToDevice(200),
         fireRate: 100,
         poolSize: 2,
     },
     world: {
         gravity: {
-            y: 20,
+            y:  GraphicUtil.adjustPixelToDevice(20),
         },
         dimensions: {
-            width: 320,
-            height: 480,
+            width:  GraphicUtil.adjustPixelToDevice(640),
+            height:  GraphicUtil.adjustPixelToDevice(800),
         },
     },
     score: {
         position: {
-            x: 600,
-            y: 0,
+            x:  GraphicUtil.adjustPixelToDevice(600),
+            y:  GraphicUtil.adjustPixelToDevice(0),
         },
         incrementValue: 5,
     },

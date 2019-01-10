@@ -10,6 +10,10 @@ class GraphicUtil {
             .lineStyle(lineStyle.width, lineStyle.color, lineStyle.alpha)
             .drawCircle(circle.x, circle.y, circle.diameter);
     }
+
+    static adjustPixelToDevice(pixelValue) {
+        return pixelValue * window.devicePixelRatio;
+    }
 }
 
 GraphicUtil.bulletGraphicName = 'bullet';
