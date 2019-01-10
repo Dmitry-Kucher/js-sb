@@ -1,24 +1,22 @@
-import Phaser from 'phaser';
 import {GraphicUtil} from '../utils/graphic-util';
 
 class Enemies {
 	constructor(game){
 		this.game = game;
-		const x = this.game.width / 2 - this.game.PHYSICAL_PROPERTIES.enemies.diameter / 2;
+		const x = this.game.world.centerX - this.game.PHYSICAL_PROPERTIES.enemies.diameter / 2;
         const y = this.game.PHYSICAL_PROPERTIES.enemies.diameter;
 		this.enemyProps = {
             x,
             y,
-            color: 0x555555,
+            color: 0xeeeeee,
             circle: {
                 x: 0,
                 y: 0,
                 diameter: this.game.PHYSICAL_PROPERTIES.enemies.diameter,
             },
             lineStyle: {
-                width: 2,
-                color: 0xffffff,
-                alpha: 0.5,
+                width: GraphicUtil.adjustPixelToDevice(1),
+                color: 0x000000,
             },
         };
         const enemy = GraphicUtil.getCircleItem(this.enemyProps, this.game);

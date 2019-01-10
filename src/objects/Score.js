@@ -6,13 +6,12 @@ class Score {
 		this.game = game;
 		this.scorePosition = this.game.PHYSICAL_PROPERTIES.score.position;
         this.score = 0;
-        this.scoreBuffer = 0;
+        this.strokeThickness = GraphicUtil.adjustPixelToDevice(4);
         this.createScoreLabel();
 	}
 
 	createScoreLabel(){
         const scoreFont = "30px Arial";
-        //Create the score label
         this.scoreLabel = this.game.add.text(
             this.scorePosition.x,
             this.scorePosition.y,
@@ -21,14 +20,19 @@ class Score {
                 font: scoreFont,
                 fill: "#ffffff",
                 stroke: "#535353",
-                strokeThickness: 4
+                strokeThickness: this.strokeThickness,
             }
-        ); 
+        );
         this.scoreLabel.anchor.setTo(0.5, 0);
         this.scoreLabel.align = 'center';
 
-        //Create a tween to grow / shrink the score label
-        this.scoreLabelTween = this.game.add.tween(this.scoreLabel.scale).to({ x: 1.5, y: 1.5}, 200, Phaser.Easing.Linear.In).to({ x: 1, y: 1}, 200, Phaser.Easing.Linear.In);
+        const fontScaling = { x: GraphicUtil.adjustPixelToDevice(1.5), y: GraphicUtil.adjustPixelToDevice(1.5)};
+        const fontNormal = { x: GraphicUtil.adjustPixelToDevice(1), y: GraphicUtil.adjustPixelToDevice(1)};
+        const animationDuration = 200;
+        this.scoreLabelTween = this.game.add
+            .tween(this.scoreLabel.scale)
+            .to(fontScaling, animationDuration, Phaser.Easing.Linear.In)
+            .to(fontNormal, animationDuration, Phaser.Easing.Linear.In);
     }
 
     incrementScore(incrementValue) {
@@ -46,16 +50,15 @@ class Score {
                 font: scoreFont,
                 fill: "#ffffff",
                 stroke: "#535353",
-                strokeThickness: 4
+                strokeThickness: this.strokeThickness,
             }
         );
-        scoreAnimation.anchor.setTo(0.5, 0);
+        scoreAnimation.anchor.setTo(0.5, 0.5);
         scoreAnimation.align = 'center';
 
-        //Tween this score label to the total score label
         const scoreTween = this.game.add
-                            .tween(scoreAnimation)
-                            .to(this.scorePosition, 800, Phaser.Easing.Exponential.In, true);
+            .tween(scoreAnimation)
+            .to(this.scorePosition, 800, Phaser.Easing.Exponential.In, true);
 
         scoreTween.onComplete.add(() => {
             scoreAnimation.destroy();

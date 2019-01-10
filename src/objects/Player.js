@@ -4,7 +4,7 @@ import {GraphicUtil} from '../utils/graphic-util';
 class Player {
 	constructor(game){
 		this.game = game;
-		const x = this.game.width / 2 - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
+		const x = this.game.world.centerX - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
         const y = this.game.height - this.game.PHYSICAL_PROPERTIES.player.diameter / 2;
 		this.playerProps = {
             x,
@@ -16,12 +16,11 @@ class Player {
                 diameter: this.game.PHYSICAL_PROPERTIES.player.diameter,
             },
             lineStyle: {
-                width: 2,
+                width: GraphicUtil.adjustPixelToDevice(2),
                 color: 0xffffff,
-                alpha: 0.5,
             },
         };
-        this.movementValue = 5;
+        this.movementValue = this.game.PHYSICAL_PROPERTIES.player.movementValue;
 	}
 
 	spawn() {

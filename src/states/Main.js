@@ -3,6 +3,7 @@ import Player from '../objects/Player';
 import Weapon from '../objects/Weapon';
 import Enemies from '../objects/Enemies';
 import Score from '../objects/Score';
+import {GraphicUtil} from "../utils/graphic-util";
 
 class Main extends Phaser.State {
 
@@ -23,7 +24,7 @@ class Main extends Phaser.State {
 
 		this.game.physics.enable([this.enemies, this.weapon.bullets], Phaser.Physics.ARCADE, true);
 		this.game.physics.arcade.gravity.y = this.game.PHYSICAL_PROPERTIES.world.gravity.y;
-		
+
 		this.score = new Score(this.game);
 	}
 
@@ -37,7 +38,7 @@ class Main extends Phaser.State {
 	}
 
 	render() {
-		this.game.debug.text('Living: ' + this.enemies.countLiving() + '   Dead: ' + this.enemies.countDead(), 32, 64);
+		this.game.debug.text('Living: ' + this.enemies.countLiving() + '   Dead: ' + this.enemies.countDead(), GraphicUtil.adjustPixelToDevice(32), GraphicUtil.adjustPixelToDevice(64));
 	}
 
 	collisionHandler(bullet, enemy) {
