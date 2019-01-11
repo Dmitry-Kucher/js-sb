@@ -27,13 +27,13 @@ const PHYSICAL_PROPERTIES = {
             y:  GraphicUtil.adjustPixelToDevice(20),
         },
         dimensions: {
-            width:  GraphicUtil.adjustPixelToDevice(240),
-            height:  GraphicUtil.adjustPixelToDevice(320),
+            width:  GraphicUtil.adjustPixelToDevice(640),
+            height:  GraphicUtil.adjustPixelToDevice(800),
         },
     },
     score: {
         position: {
-            x:  GraphicUtil.adjustPixelToDevice(200),
+            x:  GraphicUtil.adjustPixelToDevice(600),
             y:  GraphicUtil.adjustPixelToDevice(0),
         },
         incrementValue: 5,
@@ -42,7 +42,7 @@ const PHYSICAL_PROPERTIES = {
         gyroRange: {
             left: -10,
             right: 10,
-        },
+        }
     },
 };
 
