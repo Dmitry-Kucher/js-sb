@@ -52,12 +52,12 @@ class Player {
                 if(this.playerSprite.body.velocity.x > 0) {
                     this.playerSprite.body.velocity.x = 0;
                 }
-                this.move(data.gamma);
+                this.move(this.movementValue);
             } else if(data.gamma < this.game.PHYSICAL_PROPERTIES.control.gyroRange.right) {
                 if(this.playerSprite.body.velocity.x < 0) {
                     this.playerSprite.body.velocity.x = 0;
                 }
-                this.move(data.gamma);
+                this.move(this.movementValue);
             } else {
                 this.stopMovement();
             }
