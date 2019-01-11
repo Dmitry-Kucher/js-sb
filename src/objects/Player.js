@@ -46,11 +46,12 @@ class Player {
 
     initGyroScopeControl() {
         this.movementValue = 2 * this.movementValue;
+        gyro.frequency = 200;
         gyro.startTracking((data) => {
             if (data.gamma > this.game.PHYSICAL_PROPERTIES.control.gyroRange.left) {
-                this.moveRight();
+                this.move(data.gamma);
             } else if(data.gamma < this.game.PHYSICAL_PROPERTIES.control.gyroRange.right) {
-                this.moveLeft();
+                this.move(data.gamma);
             } else {
                 this.stopMovement();
             }
