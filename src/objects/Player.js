@@ -48,6 +48,7 @@ class Player {
         this.movementValue = 2 * this.movementValue;
         gyro.frequency = 200;
         gyro.startTracking((data) => {
+            this.game.debug.text(data.gamma, GraphicUtil.adjustPixelToDevice(120), GraphicUtil.adjustPixelToDevice(120));
             if (data.gamma > this.game.PHYSICAL_PROPERTIES.control.gyroRange.left) {
                 this.move(data.gamma);
             } else if(data.gamma < this.game.PHYSICAL_PROPERTIES.control.gyroRange.right) {
