@@ -27,13 +27,13 @@ const PHYSICAL_PROPERTIES = {
             y:  GraphicUtil.adjustPixelToDevice(20),
         },
         dimensions: {
-            width:  GraphicUtil.adjustPixelToDevice(640),
-            height:  GraphicUtil.adjustPixelToDevice(800),
+            width:  GraphicUtil.adjustPixelToDevice(240),
+            height:  GraphicUtil.adjustPixelToDevice(320),
         },
     },
     score: {
         position: {
-            x:  GraphicUtil.adjustPixelToDevice(600),
+            x:  GraphicUtil.adjustPixelToDevice(200),
             y:  GraphicUtil.adjustPixelToDevice(0),
         },
         incrementValue: 5,
