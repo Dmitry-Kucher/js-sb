@@ -13,7 +13,9 @@ class Main extends Phaser.State {
 		const playerWrapper = new Player(this.game);
 		const player = playerWrapper.spawn();
 		playerWrapper.addControls();
-		playerWrapper.initGyroScopeControl();
+		if (gyro.getFeatures().length) {
+			playerWrapper.initGyroScopeControl();
+		}
 
 		const weaponWrapper = new Weapon(this.game);
 		this.weapon = weaponWrapper.spawn(player);

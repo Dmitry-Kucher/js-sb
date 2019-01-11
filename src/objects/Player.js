@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import {GraphicUtil} from '../utils/graphic-util';
-import GyroNorm from 'gyronorm';
 
 class Player {
 	constructor(game){
@@ -45,19 +44,18 @@ class Player {
         rightKey.onUp.add(this.stopMovement, this);
     }
 
-    async initGyroScopeControl() {
-        let gn = await (new GyroNorm().init());
-        if(!gn.isAvailable()) {
-            return;
-        }
-        gn.start((data) => {
-            if(data.do.gamma > 10) {
+    initGyroScopeControl() {
+        gyro.frequency = 10;
+        gyro.startTracking((data) => {
+            if (data.gamma > 10) {
                 this.moveRight();
-            } else if (data.do.gamma < -10) {
+            } else if(data.gamma < -10) {
                 this.moveLeft();
             } else {
                 this.stopMovement();
             }
+            // player.body.velocity.x += o.gamma / 20;
+            // player.body.velocity.y += o.beta / 20;
         });
     }
 
