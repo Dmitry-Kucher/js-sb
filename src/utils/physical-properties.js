@@ -38,6 +38,12 @@ const PHYSICAL_PROPERTIES = {
         },
         incrementValue: 5,
     },
+    control: {
+        gyroRange: {
+            left: -10,
+            right: 10,
+        },
+    },
 };
 
 export {PHYSICAL_PROPERTIES};

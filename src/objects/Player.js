@@ -45,17 +45,15 @@ class Player {
     }
 
     initGyroScopeControl() {
-        gyro.frequency = 10;
+        this.movementValue = 2 * this.movementValue;
         gyro.startTracking((data) => {
-            if (data.gamma > 10) {
+            if (data.gamma > this.game.PHYSICAL_PROPERTIES.control.gyroRange.left) {
                 this.moveRight();
-            } else if(data.gamma < -10) {
+            } else if(data.gamma < this.game.PHYSICAL_PROPERTIES.control.gyroRange.right) {
                 this.moveLeft();
             } else {
                 this.stopMovement();
             }
-            // player.body.velocity.x += o.gamma / 20;
-            // player.body.velocity.y += o.beta / 20;
         });
     }
 
