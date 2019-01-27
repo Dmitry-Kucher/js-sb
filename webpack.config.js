@@ -20,7 +20,7 @@ module.exports = {
         pathinfo: true,
         path: path.resolve(__dirname, 'dist'),
         publicPath: './',
-        filename: 'js/[name].js'
+        filename: 'js/[name].[hash].js'
     },
     devtool: 'source-map',
     devServer: {
