@@ -1,49 +1,49 @@
-import {GraphicUtil} from "./graphic-util";
+import GraphicUtil from './graphic-util';
 
 const PHYSICAL_PROPERTIES = {
-    enemies: {
-        onHurt: {
-            gravity: {
-                y: GraphicUtil.adjustPixelToDevice(20),
-                x:  GraphicUtil.adjustPixelToDevice(10),
-            },
-            velocity: {
-                x:  GraphicUtil.adjustPixelToDevice(50),
-            },
-        },
-        diameter:  GraphicUtil.adjustPixelToDevice(30),
+  enemies: {
+    onHurt: {
+      gravity: {
+        y: GraphicUtil.adjustPixelToDevice(20),
+        x: GraphicUtil.adjustPixelToDevice(10),
+      },
+      velocity: {
+        x: GraphicUtil.adjustPixelToDevice(50),
+      },
     },
-    player: {
-        diameter:  GraphicUtil.adjustPixelToDevice(20),
-        movementValue: GraphicUtil.adjustPixelToDevice(5),
+    diameter: GraphicUtil.adjustPixelToDevice(30),
+  },
+  player: {
+    diameter: GraphicUtil.adjustPixelToDevice(20),
+    movementValue: GraphicUtil.adjustPixelToDevice(5),
+  },
+  bullet: {
+    speed: GraphicUtil.adjustPixelToDevice(200),
+    fireRate: 100,
+    poolSize: 2,
+  },
+  world: {
+    gravity: {
+      y: GraphicUtil.adjustPixelToDevice(20),
     },
-    bullet: {
-        speed:  GraphicUtil.adjustPixelToDevice(200),
-        fireRate: 100,
-        poolSize: 2,
+    dimensions: {
+      width: GraphicUtil.adjustPixelToDevice(640),
+      height: GraphicUtil.adjustPixelToDevice(800),
     },
-    world: {
-        gravity: {
-            y:  GraphicUtil.adjustPixelToDevice(20),
-        },
-        dimensions: {
-            width:  GraphicUtil.adjustPixelToDevice(640),
-            height:  GraphicUtil.adjustPixelToDevice(800),
-        },
+  },
+  score: {
+    position: {
+      x: GraphicUtil.adjustPixelToDevice(600),
+      y: GraphicUtil.adjustPixelToDevice(0),
     },
-    score: {
-        position: {
-            x:  GraphicUtil.adjustPixelToDevice(600),
-            y:  GraphicUtil.adjustPixelToDevice(0),
-        },
-        incrementValue: 5,
+    incrementValue: 5,
+  },
+  control: {
+    gyroRange: {
+      left: -10,
+      right: 10,
     },
-    control: {
-        gyroRange: {
-            left: -10,
-            right: 10,
-        }
-    },
+  },
 };
 
-export {PHYSICAL_PROPERTIES};
+export default PHYSICAL_PROPERTIES;

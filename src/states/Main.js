@@ -3,60 +3,69 @@ import Player from '../objects/Player';
 import Weapon from '../objects/Weapon';
 import Enemies from '../objects/Enemies';
 import Score from '../objects/Score';
-import {GraphicUtil} from "../utils/graphic-util";
+import GraphicUtil from '../utils/graphic-util';
 
 class Main extends Phaser.State {
+  create() {
+    this.game.stage.backgroundColor = '#cecece';
 
-	create() {
-		this.game.stage.backgroundColor = '#cecece';
+    const playerWrapper = new Player(this.game);
+    const player = playerWrapper.spawn();
 
-		const playerWrapper = new Player(this.game);
-		const player = playerWrapper.spawn();
-		
-		if (gyro.getFeatures().length) {
-			playerWrapper.initGyroScopeControl();
-		} else {
-			playerWrapper.addControls();
-		}
+    if (gyro.getFeatures().length) {
+      playerWrapper.initGyroScopeControl();
+    } else {
+      playerWrapper.addControls();
+    }
 
-		const weaponWrapper = new Weapon(this.game);
-		this.weapon = weaponWrapper.spawn(player);
-		weaponWrapper.addControls();
+    const weaponWrapper = new Weapon(this.game);
+    this.weapon = weaponWrapper.spawn(player);
+    weaponWrapper.addControls();
 
-		this.enemyWrapper = new Enemies(this.game);
-		this.enemies = this.enemyWrapper.enemiesGroup;
-		this.enemy = this.enemyWrapper.spawn();
+    this.enemyWrapper = new Enemies(this.game);
+    this.enemies = this.enemyWrapper.enemiesGroup;
+    this.enemy = this.enemyWrapper.spawn();
 
-		this.game.physics.enable([this.enemies, this.weapon.bullets], Phaser.Physics.ARCADE, true);
-		this.game.physics.arcade.gravity.y = this.game.PHYSICAL_PROPERTIES.world.gravity.y;
+    this.game.physics.enable([this.enemies, this.weapon.bullets], Phaser.Physics.ARCADE, true);
+    this.game.physics.arcade.gravity.y = this.game.PHYSICAL_PROPERTIES.world.gravity.y;
 
-		this.score = new Score(this.game);
-	}
+    this.score = new Score(this.game);
+  }
 
-	update() {
-		// this.score.incrementScore();
-		this.game.physics.arcade.overlap(this.weapon.bullets, this.enemies, this.collisionHandler, null, this);
-		if(!this.enemies.countLiving()) {
-			this.game.finalScore = this.score.score;
-			this.game.state.start("GameOver");
-		}
-	}
+  update() {
+    // this.score.incrementScore();
+    this.game.physics.arcade.overlap(
+      this.weapon.bullets,
+      this.enemies,
+      this.collisionHandler,
+      null,
+      this,
+    );
+    if (!this.enemies.countLiving()) {
+      this.game.finalScore = this.score.score;
+      this.game.state.start('GameOver');
+    }
+  }
 
-	render() {
-		this.game.debug.text('Living: ' + this.enemies.countLiving() + '   Dead: ' + this.enemies.countDead(), GraphicUtil.adjustPixelToDevice(32), GraphicUtil.adjustPixelToDevice(64));
-	}
+  render() {
+    this.game.debug.text(
+      `Living: ${this.enemies.countLiving()}   Dead: ${this.enemies.countDead()}`,
+      GraphicUtil.adjustPixelToDevice(32),
+      GraphicUtil.adjustPixelToDevice(64),
+    );
+  }
 
-	collisionHandler(bullet, enemy) {
-		if(bullet.alive && enemy.alive){ // keep condition to trigger collision handler only once
-			bullet.kill();
-			enemy.destroy();
-			this.enemyWrapper.onCollide(enemy);
-			const incrementValue = (this.enemies.countLiving() - 1) * this.game.PHYSICAL_PROPERTIES.score.incrementValue;
-			this.score.createScoreAnimation(enemy.x, enemy.y, incrementValue);
-			// this.score.incrementScore(incrementValue);
-		}
-	}
-
+  collisionHandler(bullet, enemy) {
+    if (bullet.alive && enemy.alive) { // keep condition to trigger collision handler only once
+      bullet.kill();
+      enemy.destroy();
+      this.enemyWrapper.onCollide(enemy);
+      const livingEnemies = this.enemies.countLiving();
+      const incrementRatio = this.game.PHYSICAL_PROPERTIES.score.incrementValue;
+      const incrementValue = (livingEnemies - 1) * incrementRatio;
+      this.score.createScoreAnimation(enemy.x, enemy.y, incrementValue);
+    }
+  }
 }
 
 export default Main;
