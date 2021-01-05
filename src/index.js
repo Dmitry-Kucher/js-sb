@@ -7,27 +7,25 @@ import Preload from './states/Preload';
 import GameTitle from './states/GameTitle';
 import Main from './states/Main';
 import GameOver from './states/GameOver';
-import {PHYSICAL_PROPERTIES} from './utils/physical-properties';
-import {GraphicUtil} from "./utils/graphic-util";
+import PHYSICAL_PROPERTIES from './utils/physical-properties';
 
 class Game extends Phaser.Game {
+  constructor(...args) {
+    super(...args);
+    this.PHYSICAL_PROPERTIES = PHYSICAL_PROPERTIES;
 
-	constructor() {
+    this.state.add('Boot', Boot, false);
+    this.state.add('Preload', Preload, false);
+    this.state.add('GameTitle', GameTitle, false);
+    this.state.add('Main', Main, false);
+    this.state.add('GameOver', GameOver, false);
 
-		super(...arguments);
-		this.PHYSICAL_PROPERTIES = PHYSICAL_PROPERTIES;
-
-		this.state.add('Boot', Boot, false);
-		this.state.add('Preload', Preload, false);
-		this.state.add('GameTitle', GameTitle, false);
-		this.state.add('Main', Main, false);
-		this.state.add('GameOver', GameOver, false);
-
-		this.state.start('Boot');
-	}
-
+    this.state.start('Boot');
+  }
 }
 
-const width = PHYSICAL_PROPERTIES.world.dimensions.width;
-const height = PHYSICAL_PROPERTIES.world.dimensions.height;
+const { width } = PHYSICAL_PROPERTIES.world.dimensions;
+const { height } = PHYSICAL_PROPERTIES.world.dimensions;
+
+// eslint-disable-next-line no-new
 new Game(width, height, Phaser.AUTO);
